@@ -1,0 +1,39 @@
+test_action_mask_covers_range_boundaries_and_affordability (test_environment.CombatRulesTests.test_action_mask_covers_range_boundaries_and_affordability) ... ok
+test_approach_resolves_slash_at_the_new_distance (test_environment.CombatRulesTests.test_approach_resolves_slash_at_the_new_distance) ... ok
+test_death_precedes_timeout_and_health_is_clamped (test_environment.CombatRulesTests.test_death_precedes_timeout_and_health_is_clamped) ... ok
+test_guard_fully_blocks_slash_and_lunge (test_environment.CombatRulesTests.test_guard_fully_blocks_slash_and_lunge) ... ok
+test_guard_only_partially_blocks_heavy_sweep (test_environment.CombatRulesTests.test_guard_only_partially_blocks_heavy_sweep) ... ok
+test_intrinsic_timeout_is_a_loss_and_termination (test_environment.CombatRulesTests.test_intrinsic_timeout_is_a_loss_and_termination) ... ok
+test_invalid_action_types_do_not_advance_state_or_rng (test_environment.CombatRulesTests.test_invalid_action_types_do_not_advance_state_or_rng) ... ok
+test_invalid_debug_states_are_rejected (test_environment.CombatRulesTests.test_invalid_debug_states_are_rejected) ... ok
+test_lethal_strike_precedes_retaliation_and_deadline (test_environment.CombatRulesTests.test_lethal_strike_precedes_retaliation_and_deadline) ... ok
+test_lunge_can_catch_a_retreating_player (test_environment.CombatRulesTests.test_lunge_can_catch_a_retreating_player) ... ok
+test_lunge_from_far_closes_distance_without_hitting (test_environment.CombatRulesTests.test_lunge_from_far_closes_distance_without_hitting) ... ok
+test_masked_strike_wastes_turn_without_spending_stamina (test_environment.CombatRulesTests.test_masked_strike_wastes_turn_without_spending_stamina) ... ok
+test_nonlethal_strike_does_not_cancel_boss_attack (test_environment.CombatRulesTests.test_nonlethal_strike_does_not_cancel_boss_attack) ... ok
+test_observation_is_a_copy_not_mutable_environment_storage (test_environment.CombatRulesTests.test_observation_is_a_copy_not_mutable_environment_storage) ... ok
+test_out_of_range_strike_is_masked_and_cannot_damage_boss (test_environment.CombatRulesTests.test_out_of_range_strike_is_masked_and_cannot_damage_boss) ... ok
+test_reset_restores_complete_initial_state (test_environment.CombatRulesTests.test_reset_restores_complete_initial_state) ... ok
+test_rest_caps_stamina_and_does_not_protect_health (test_environment.CombatRulesTests.test_rest_caps_stamina_and_does_not_protect_health) ... ok
+test_retreat_can_escape_a_close_slash (test_environment.CombatRulesTests.test_retreat_can_escape_a_close_slash) ... ok
+test_retreat_from_close_does_not_escape_sweep (test_environment.CombatRulesTests.test_retreat_from_close_does_not_escape_sweep) ... ok
+test_retreat_from_medium_escapes_sweep (test_environment.CombatRulesTests.test_retreat_from_medium_escapes_sweep) ... ok
+test_reward_ablation_removes_only_health_and_stamina_terms (test_environment.CombatRulesTests.test_reward_ablation_removes_only_health_and_stamina_terms) ... ok
+test_step_requires_reset_and_refuses_finished_episode (test_environment.CombatRulesTests.test_step_requires_reset_and_refuses_finished_episode) ... ok
+test_gymnasium_environment_checker (test_environment.EnvironmentIntegrationTests.test_gymnasium_environment_checker) ... ok
+test_random_rollouts_preserve_invariants_and_finish (test_environment.EnvironmentIntegrationTests.test_random_rollouts_preserve_invariants_and_finish) ... ok
+test_rendering_does_not_change_state_or_future_randomness (test_environment.EnvironmentIntegrationTests.test_rendering_does_not_change_state_or_future_randomness) ... ok
+test_rgb_render_returns_a_valid_image (test_environment.EnvironmentIntegrationTests.test_rgb_render_returns_a_valid_image) ... ok
+test_seeded_trajectories_reproduce (test_environment.EnvironmentIntegrationTests.test_seeded_trajectories_reproduce) ... ok
+test_all_controller_probabilities_are_valid (test_environment.StochasticControllerTests.test_all_controller_probabilities_are_valid) ... ok
+test_distance_aware_far_range_prefers_lunging (test_environment.StochasticControllerTests.test_distance_aware_far_range_prefers_lunging) ... ok
+test_enraged_probability_changes_at_observed_boss_health (test_environment.StochasticControllerTests.test_enraged_probability_changes_at_observed_boss_health) ... ok
+test_mixed_after_recovery_uses_unweighted_controller_mixture (test_environment.StochasticControllerTests.test_mixed_after_recovery_uses_unweighted_controller_mixture) ... ok
+test_mixed_attack_probabilities_include_combo_weighting (test_environment.StochasticControllerTests.test_mixed_attack_probabilities_include_combo_weighting) ... ok
+test_recovery_is_always_followed_by_an_offensive_intent (test_environment.StochasticControllerTests.test_recovery_is_always_followed_by_an_offensive_intent) ... ok
+
+----------------------------------------------------------------------
+Ran 33 tests in 0.698s
+
+OK
+Generated three figures, full test log, evidence summary, and animated replay.

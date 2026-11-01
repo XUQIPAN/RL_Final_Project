@@ -1,0 +1,36 @@
+{
+  "kind": "measured_milestone2_evidence",
+  "tests": {
+    "run": 33,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 0.699
+  },
+  "versions": {
+    "python": "3.12.14",
+    "gymnasium": "1.4.0",
+    "numpy": "2.5.4"
+  },
+  "code_figure": {
+    "path": "read_the_boss/env.py",
+    "first_line": 141,
+    "last_line": 162,
+    "sha256": "93b380ad4e536910cf6ccd0adb4baa8092e389e0b64ab2cd1006e839b7af6e90"
+  },
+  "demo": {
+    "outcome": "victory",
+    "turns": 10,
+    "return": 100.46666666666667,
+    "remaining_player_health": 1,
+    "remaining_boss_health": 0,
+    "stamina_spent": 10,
+    "invalid_actions": 0
+  },
+  "smoke": {
+    "episodes": 1200,
+    "environment_steps": 10834,
+    "invalid_actions": 0
+  },
+  "note": "All policies are untrained heuristics. Held-out mechanics receive unit tests only."
+}

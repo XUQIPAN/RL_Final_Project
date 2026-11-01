@@ -1,0 +1,17 @@
+HEURISTIC ENVIRONMENT SMOKE CHECK (no trained RL policy)
+Held-out controllers excluded; shared episode seeds for every comparison.
+Episodes per row: 100; seeds 1000..1099
+Opponent         Policy       Wins  Death  Time   Win %   Turns
+balanced         random          0    100     0     0.0    9.01
+balanced         aggressive     22     78     0    22.0    5.48
+balanced         reactive       22     78     0    22.0   10.16
+aggressive       random          0    100     0     0.0    9.18
+aggressive       aggressive      8     92     0     8.0    5.15
+aggressive       reactive       13     87     0    13.0   12.52
+distance_aware   random          0    100     0     0.0    9.07
+distance_aware   aggressive     20     80     0    20.0    5.67
+distance_aware   reactive       56     44     0    56.0   14.55
+mixed            random          0    100     0     0.0    9.65
+mixed            aggressive     20     80     0    20.0    5.49
+mixed            reactive       36     64     0    36.0   12.41
+Saved measured results to evidence/smoke_results.json

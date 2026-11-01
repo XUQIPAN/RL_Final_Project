@@ -1,0 +1,25 @@
+READ THE BOSS | Milestone 2 environment demonstration
+Heuristic policy=reactive; opponent=balanced; seed=7
+No reinforcement learning training is performed in this demo.
+RESET HP=6 BOSS=8 EN=4 D=MEDIUM NEXT=RECOVERY LEFT=40
+t=01 APPROACH HP=6 BOSS=8 EN=4 D=CLOSE NEXT=SWEEP LEFT=39 R=-0.100
+     Approach: moved one band closer.; Boss recovery: player takes 0 damage.; Next intent: sweep.
+t=02 GUARD    HP=5 BOSS=8 EN=3 D=CLOSE NEXT=RECOVERY LEFT=38 R=-0.120
+     Guard: block up to 2 damage this turn.; Boss sweep: player takes 1 damage.; Next intent: recovery.
+t=03 STRIKE   HP=5 BOSS=6 EN=1 D=CLOSE NEXT=LUNGE LEFT=37 R=-0.140
+     Strike: dealt 2 damage.; Boss recovery: player takes 0 damage.; Next intent: lunge.
+t=04 REST     HP=4 BOSS=6 EN=3 D=CLOSE NEXT=SLASH LEFT=36 R=-0.100
+     Rest: recovered 2 stamina.; Boss lunge: player takes 1 damage.; Next intent: slash.
+t=05 GUARD    HP=4 BOSS=6 EN=2 D=CLOSE NEXT=RECOVERY LEFT=35 R=-0.120
+     Guard: block up to 2 damage this turn.; Boss slash: player takes 0 damage.; Next intent: recovery.
+t=06 STRIKE   HP=4 BOSS=4 EN=0 D=CLOSE NEXT=SLASH LEFT=34 R=-0.140
+     Strike: dealt 2 damage.; Boss recovery: player takes 0 damage.; Next intent: slash.
+t=07 REST     HP=2 BOSS=4 EN=2 D=CLOSE NEXT=RECOVERY LEFT=33 R=-0.100
+     Rest: recovered 2 stamina.; Boss slash: player takes 2 damage.; Next intent: recovery.
+t=08 STRIKE   HP=2 BOSS=2 EN=0 D=CLOSE NEXT=LUNGE LEFT=32 R=-0.140
+     Strike: dealt 2 damage.; Boss recovery: player takes 0 damage.; Next intent: lunge.
+t=09 REST     HP=1 BOSS=2 EN=2 D=CLOSE NEXT=SLASH LEFT=31 R=-0.100
+     Rest: recovered 2 stamina.; Boss lunge: player takes 1 damage.; Next intent: slash.
+t=10 STRIKE   HP=1 BOSS=0 EN=0 D=CLOSE NEXT=SLASH LEFT=30 R=+101.527
+     Strike: dealt 2 damage.; Lethal strike: boss retaliation cancelled.; Episode ended: victory.
+END outcome=victory turns=10 return=+100.467 invalid_actions=0

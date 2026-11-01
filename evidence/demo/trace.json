@@ -1,0 +1,558 @@
+{
+  "schema_version": 1,
+  "kind": "heuristic_environment_demo",
+  "trained_policy": false,
+  "seed": 7,
+  "opponent": "balanced",
+  "policy": "reactive",
+  "versions": {
+    "python": "3.12.14",
+    "gymnasium": "1.4.0",
+    "numpy": "2.5.4"
+  },
+  "initial_observation": [
+    6,
+    8,
+    4,
+    1,
+    3,
+    40
+  ],
+  "initial_info": {
+    "action_mask": [
+      1,
+      1,
+      0,
+      1,
+      1
+    ],
+    "outcome": "ongoing",
+    "invalid_action": false,
+    "events": [
+      "Reset: ready for the first decision."
+    ],
+    "stamina_spent": 0,
+    "damage_dealt": 0,
+    "damage_taken": 0,
+    "reward_terms": {
+      "time": 0.0,
+      "stamina": 0.0,
+      "terminal": 0.0,
+      "health": 0.0
+    }
+  },
+  "steps": [
+    {
+      "turn": 1,
+      "action": 0,
+      "action_name": "APPROACH",
+      "observation_before": [
+        6,
+        8,
+        4,
+        1,
+        3,
+        40
+      ],
+      "observation_after": [
+        6,
+        8,
+        4,
+        0,
+        1,
+        39
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Approach: moved one band closer.",
+          "Boss recovery: player takes 0 damage.",
+          "Next intent: sweep."
+        ],
+        "stamina_spent": 0,
+        "damage_dealt": 0,
+        "damage_taken": 0,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.0,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 2,
+      "action": 3,
+      "action_name": "GUARD",
+      "observation_before": [
+        6,
+        8,
+        4,
+        0,
+        1,
+        39
+      ],
+      "observation_after": [
+        5,
+        8,
+        3,
+        0,
+        3,
+        38
+      ],
+      "reward": -0.12000000000000001,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Guard: block up to 2 damage this turn.",
+          "Boss sweep: player takes 1 damage.",
+          "Next intent: recovery."
+        ],
+        "stamina_spent": 1,
+        "damage_dealt": 0,
+        "damage_taken": 1,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.02,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 3,
+      "action": 2,
+      "action_name": "STRIKE",
+      "observation_before": [
+        5,
+        8,
+        3,
+        0,
+        3,
+        38
+      ],
+      "observation_after": [
+        5,
+        6,
+        1,
+        0,
+        2,
+        37
+      ],
+      "reward": -0.14,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          0,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Strike: dealt 2 damage.",
+          "Boss recovery: player takes 0 damage.",
+          "Next intent: lunge."
+        ],
+        "stamina_spent": 2,
+        "damage_dealt": 2,
+        "damage_taken": 0,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.04,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 4,
+      "action": 4,
+      "action_name": "REST",
+      "observation_before": [
+        5,
+        6,
+        1,
+        0,
+        2,
+        37
+      ],
+      "observation_after": [
+        4,
+        6,
+        3,
+        0,
+        0,
+        36
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Rest: recovered 2 stamina.",
+          "Boss lunge: player takes 1 damage.",
+          "Next intent: slash."
+        ],
+        "stamina_spent": 0,
+        "damage_dealt": 0,
+        "damage_taken": 1,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.0,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 5,
+      "action": 3,
+      "action_name": "GUARD",
+      "observation_before": [
+        4,
+        6,
+        3,
+        0,
+        0,
+        36
+      ],
+      "observation_after": [
+        4,
+        6,
+        2,
+        0,
+        3,
+        35
+      ],
+      "reward": -0.12000000000000001,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Guard: block up to 2 damage this turn.",
+          "Boss slash: player takes 0 damage.",
+          "Next intent: recovery."
+        ],
+        "stamina_spent": 1,
+        "damage_dealt": 0,
+        "damage_taken": 0,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.02,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 6,
+      "action": 2,
+      "action_name": "STRIKE",
+      "observation_before": [
+        4,
+        6,
+        2,
+        0,
+        3,
+        35
+      ],
+      "observation_after": [
+        4,
+        4,
+        0,
+        0,
+        0,
+        34
+      ],
+      "reward": -0.14,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Strike: dealt 2 damage.",
+          "Boss recovery: player takes 0 damage.",
+          "Next intent: slash."
+        ],
+        "stamina_spent": 2,
+        "damage_dealt": 2,
+        "damage_taken": 0,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.04,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 7,
+      "action": 4,
+      "action_name": "REST",
+      "observation_before": [
+        4,
+        4,
+        0,
+        0,
+        0,
+        34
+      ],
+      "observation_after": [
+        2,
+        4,
+        2,
+        0,
+        3,
+        33
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Rest: recovered 2 stamina.",
+          "Boss slash: player takes 2 damage.",
+          "Next intent: recovery."
+        ],
+        "stamina_spent": 0,
+        "damage_dealt": 0,
+        "damage_taken": 2,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.0,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 8,
+      "action": 2,
+      "action_name": "STRIKE",
+      "observation_before": [
+        2,
+        4,
+        2,
+        0,
+        3,
+        33
+      ],
+      "observation_after": [
+        2,
+        2,
+        0,
+        0,
+        2,
+        32
+      ],
+      "reward": -0.14,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Strike: dealt 2 damage.",
+          "Boss recovery: player takes 0 damage.",
+          "Next intent: lunge."
+        ],
+        "stamina_spent": 2,
+        "damage_dealt": 2,
+        "damage_taken": 0,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.04,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 9,
+      "action": 4,
+      "action_name": "REST",
+      "observation_before": [
+        2,
+        2,
+        0,
+        0,
+        2,
+        32
+      ],
+      "observation_after": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        31
+      ],
+      "reward": -0.1,
+      "terminated": false,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          1,
+          1,
+          1,
+          1
+        ],
+        "outcome": "ongoing",
+        "invalid_action": false,
+        "events": [
+          "Rest: recovered 2 stamina.",
+          "Boss lunge: player takes 1 damage.",
+          "Next intent: slash."
+        ],
+        "stamina_spent": 0,
+        "damage_dealt": 0,
+        "damage_taken": 1,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.0,
+          "terminal": 0.0,
+          "health": 0.0
+        }
+      }
+    },
+    {
+      "turn": 10,
+      "action": 2,
+      "action_name": "STRIKE",
+      "observation_before": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        31
+      ],
+      "observation_after": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        30
+      ],
+      "reward": 101.52666666666667,
+      "terminated": true,
+      "truncated": false,
+      "info": {
+        "action_mask": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "outcome": "victory",
+        "invalid_action": false,
+        "events": [
+          "Strike: dealt 2 damage.",
+          "Lethal strike: boss retaliation cancelled.",
+          "Episode ended: victory."
+        ],
+        "stamina_spent": 2,
+        "damage_dealt": 2,
+        "damage_taken": 0,
+        "reward_terms": {
+          "time": -0.1,
+          "stamina": -0.04,
+          "terminal": 100.0,
+          "health": 1.6666666666666667
+        }
+      }
+    }
+  ],
+  "frames": [
+    "frame_000.png",
+    "frame_001.png",
+    "frame_002.png",
+    "frame_003.png",
+    "frame_004.png",
+    "frame_005.png",
+    "frame_006.png",
+    "frame_007.png",
+    "frame_008.png",
+    "frame_009.png",
+    "frame_010.png"
+  ],
+  "summary": {
+    "outcome": "victory",
+    "turns": 10,
+    "return": 100.46666666666667,
+    "remaining_player_health": 1,
+    "remaining_boss_health": 0,
+    "stamina_spent": 10,
+    "invalid_actions": 0
+  }
+}
