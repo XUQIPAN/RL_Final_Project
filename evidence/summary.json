@@ -5,12 +5,12 @@
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "seconds": 0.699
+    "seconds": 0.688
   },
   "versions": {
-    "python": "3.12.14",
+    "python": "3.11.13",
     "gymnasium": "1.4.0",
-    "numpy": "2.5.4"
+    "numpy": "2.4.6"
   },
   "code_figure": {
     "path": "read_the_boss/env.py",

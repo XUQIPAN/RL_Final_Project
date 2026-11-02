@@ -6,9 +6,9 @@
   "opponent": "balanced",
   "policy": "reactive",
   "versions": {
-    "python": "3.12.14",
+    "python": "3.11.13",
     "gymnasium": "1.4.0",
-    "numpy": "2.5.4"
+    "numpy": "2.4.6"
   },
   "initial_observation": [
     6,

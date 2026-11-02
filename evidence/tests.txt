@@ -33,6 +33,6 @@ test_mixed_attack_probabilities_include_combo_weighting (test_environment.Stocha
 test_recovery_is_always_followed_by_an_offensive_intent (test_environment.StochasticControllerTests.test_recovery_is_always_followed_by_an_offensive_intent) ... ok
 
 ----------------------------------------------------------------------
-Ran 33 tests in 0.698s
+Ran 33 tests in 0.688s
 
 OK
