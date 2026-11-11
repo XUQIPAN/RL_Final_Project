@@ -1,3 +1,9 @@
+# Environment, training, and evaluation.
 gymnasium==1.4.0
 numpy>=1.24,<3
 Pillow>=10.1,<14
+
+# Report generation for Milestones 2 and 3.
+reportlab>=4,<5
+matplotlib>=3.8,<4
+Pygments>=2.17,<3

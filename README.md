@@ -28,15 +28,15 @@ Or on Windows PowerShell:
 .venv\Scripts\Activate.ps1
 ```
 
-Install dependencies:
+Install all runtime, training, evaluation, and report-generation dependencies:
 
 ```bash
-python -m pip install -r requirements-milestone3.txt
+python -m pip install -r requirements.txt
 ```
 
-For the exact direct package versions used in the earlier run, install
-`requirements-milestone3-tested.txt` instead. Matching package versions and seeds
-helps reproduce sampled trajectories. No GPU or API key is needed.
+`requirements.txt` specifies supported package versions for both milestones.
+To reproduce a run, match the package versions recorded in its experiment
+manifest and reuse the same seeds. No GPU or API key is needed.
 
 Install Git and ensure `git --version` works before using the experiment runner:
 its provenance code invokes Git. A standalone extracted folder does not need to
@@ -173,7 +173,7 @@ once per boss; uncertainty for learned methods is sample SD across training seed
 After the full experiment matrix finishes:
 
 ```bash
-python tools/build_milestone3_report.py --summary experiments/milestone3/final_summary.json --author "Qipan Xu"
+python tools/build_milestone3_report.py --summary experiments/milestone3/final_summary.json --author "Your Name"
 ```
 
 This generates the four figures, result tables, and LaTeX source under
@@ -183,7 +183,7 @@ This generates the four figures, result tables, and LaTeX source under
 Add `--compile` if a TeX distribution providing `pdflatex` is installed:
 
 ```bash
-python tools/build_milestone3_report.py --summary experiments/milestone3/final_summary.json --author "Qipan Xu" --compile
+python tools/build_milestone3_report.py --summary experiments/milestone3/final_summary.json --author "Your Name" --compile
 ```
 
 Review the generated report's wording and interpretation against your own results
@@ -195,7 +195,7 @@ in the builder if you want wording changes to persist across regeneration.
 Once the full results and PDF exist, package your submission:
 
 ```bash
-python tools/package_milestone3.py --last-name Xu --first-name Qipan
+python tools/package_milestone3.py --last-name Your Name --first-name Your Name
 ```
 
 The archive is written to `dist/Xu_Qipan_milestone3.zip`.
@@ -217,43 +217,15 @@ The archive is written to `dist/Xu_Qipan_milestone3.zip`.
 | `configs/milestone3.json` | Complete experiment design |
 | `tools/build_milestone3_report.py` | Generate figures and LaTeX/PDF from measurements |
 
-The existing environment commands still work:
+
+## 7. Quick demo
 
 ```bash
 python run_demo.py
 python -m read_the_boss play --opponent mixed --seed 7
 ```
 
+## 8. Command-line help
 Use `python -m read_the_boss.training --help`,
 `python -m read_the_boss.evaluate --help`, or
 `python -m read_the_boss.experiments --help` for command options.
-
-## 8. Commit the merged code to GitHub
-
-The Milestone 3 source is merged into the repository root. The original
-`milestone3_source/` folder is retained locally and ignored by Git; make future
-changes in the root source directories.
-
-Create a branch from your current checkout:
-
-```bash
-git switch -c milestone3-source
-```
-
-Inspect changes, run tests, and commit the source and instructions:
-
-```bash
-git status
-python -m unittest discover -s tests -v
-git add read_the_boss tests tools configs .github .gitignore .gitattributes README.md run_demo.py requirements*.txt
-git diff --cached --stat
-git commit -m "Add Milestone 3 RL source and run instructions"
-git push -u origin milestone3-source
-```
-
-Open a pull request into `main`. For future milestones, keep one maintained
-`read_the_boss/` package, use a new branch, and save each experiment configuration
-and result directory separately. Stage result files deliberately when you are
-ready to publish them. The default `experiments/local*` and `experiments/quick*`
-folders are ignored by Git. After merging a reviewed submission, preserve it with
-a milestone tag.
