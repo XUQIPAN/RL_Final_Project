@@ -3,4 +3,22 @@ __pycache__/
 .venv/
 .DS_Store
 evidence/*
+report/*
+
+# Local environments, scratch runs, and compiled LaTeX intermediates.
+# Retain the imported source folder locally; maintain the merged root files.
+/milestone3_source/
+.venv*/
+tmp/
+dist/
+experiments/*
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# Official experiments/milestone3 data and report PDFs are deliberately tracked.
 

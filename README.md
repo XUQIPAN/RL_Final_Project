@@ -1,238 +1,259 @@
-# Read the Boss - Milestone 2
+# Read the Boss — Milestone 3
 
-A custom, turn-based 1v1 reinforcement-learning environment. The fighter balances
-attacks, defense, spacing, and limited stamina against a scripted stochastic boss.
-This submission demonstrates a functioning environment, **not a trained RL agent**.
+This repository contains the complete environment, Q-learning and SARSA
+implementations, heuristic baselines, tests, configuration, and utility scripts.
+Train your own agents and generate your own results using the commands below.
+Milestone 3 models, experiment logs, figures, and PDFs are generated locally when
+you run the corresponding commands. Earlier milestone evidence and reports are
+preserved in `evidence/` and `report/`.
 
-## Submission contents
+## 1. Setup
 
-- `report/milestone2_report.pdf`: three-page report with the three required figures.
-- `read_the_boss/`: environment, controllers, renderer, heuristic policies, and CLI.
-- `tests/test_environment.py`: 33 behavioral, integration, and stochastic tests.
-- `evidence/`: original execution logs, JSON results, figures, and a seeded demo.
-- `tools/`: reproducible evidence/report generation and ZIP packaging scripts.
-- `requirements.txt`: runtime dependencies; `requirements-report.txt`: report tools.
-- `requirements-tested.txt`: exact package versions used to generate the evidence.
-
-The ZIP contains a single `milestone2/` directory. Extract it and run all commands
-below **inside that directory**. No GPU, external assets, account, or API key is needed.
-
-## Setup
-
-Use Python 3.10 or newer; the recorded run used Python 3.12.14.
+Use Python 3.12 and run all commands from the `RL_Final_Project/` repository
+root, which contains this README.
 
 ```bash
 python -m venv .venv
 ```
 
-Activate on macOS/Linux:
+Activate the environment on macOS/Linux:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Activate on Windows PowerShell:
+Or on Windows PowerShell:
 
 ```powershell
 .venv\Scripts\Activate.ps1
 ```
 
-Install runtime dependencies:
+Install dependencies:
 
 ```bash
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-milestone3.txt
 ```
 
-For the exact recorded package versions, use Python 3.12 and install
-`requirements-tested.txt` instead. Reproducibility is checked within a fixed
-package version; changing NumPy/Gymnasium versions may change sampled trajectories.
+For the exact direct package versions used in the earlier run, install
+`requirements-milestone3-tested.txt` instead. Matching package versions and seeds
+helps reproduce sampled trajectories. No GPU or API key is needed.
 
-## Run the environment
+Install Git and ensure `git --version` works before using the experiment runner:
+its provenance code invokes Git. A standalone extracted folder does not need to
+be a Git repository. Single-agent training and evaluation do not require Git.
 
-Run a seeded reactive-heuristic demonstration and save its complete trace and PNGs:
+## 2. Check the installation
 
-```bash
-python -m read_the_boss demo --opponent balanced --policy reactive --seed 7 --output evidence/demo
-```
-
-The recorded seed-7 run wins in 10 turns with 1 HP remaining and total return
-`100.4666666667`. This is one demonstration episode, not a success-rate estimate.
-Use `--no-images` for a text/JSON-only run. Frame images are read-only arena
-visualizations; the actual human controls are in the terminal:
-
-```bash
-python -m read_the_boss play --opponent mixed --seed 7
-```
-
-Enter an action number/name from the displayed legal choices. Enter `q` to quit.
-Quitting does not score the unfinished episode as a timeout.
-
-## Run tests and the environment smoke check
+Run the environment and learning tests:
 
 ```bash
 python -m unittest discover -s tests -v
-python -m read_the_boss smoke --episodes 100 --seed 1000 --output evidence/smoke_results.json
 ```
 
-The recorded run passed **33/33 tests**, with no failures, errors, or skips.
-Tests include Gymnasium's checker (with render modes), reset/reseeding, observation
-bounds, action legality, stamina, attack ranges, lethal-hit priority, reward terms,
-death/timeout, and immutable observations. They also run 280 complete random legal
-episodes across all seven controllers and 60,000 seeded intent draws for distribution checks.
+There are 48 tests covering environment behavior, Q-learning/SARSA update targets,
+action masks, terminal handling, saved-model round trips, and reproducibility.
 
-The smoke run uses three untrained policies and four training modes, with 100
-episodes per combination (seeds 1000-1099). Its 1,200 episodes completed in 10,834
-environment steps, with no masked actions submitted by the policies.
-
-| Boss controller | Random win rate | Aggressive heuristic | Reactive heuristic |
-|---|---:|---:|---:|
-| Balanced | 0% | 22% | 22% |
-| Aggressive | 0% | 8% | 13% |
-| Distance-aware | 0% | 20% | 56% |
-| Mixed | 0% | 20% | 36% |
-
-These are **small environment smoke checks, not final RL benchmarks**. All
-non-winning smoke episodes ended in death; timeout behavior is separately tested
-with controlled states. Low heuristic success on some settings motivates further
-baseline/difficulty calibration. Held-out controller mechanics receive unit tests,
-but no held-out policy benchmark or tuning was performed.
-
-## Environment API
-
-```python
-import gymnasium as gym
-import read_the_boss  # registers ReadTheBoss-v0
-
-env = gym.make("ReadTheBoss-v0", opponent="balanced", render_mode="ansi")
-obs, info = env.reset(seed=7)
-action = env.action_space.sample(mask=info["action_mask"])
-obs, reward, terminated, truncated, info = env.step(action)
-print(env.render())
-env.close()
-```
-
-- Observation order: `[player_hp, boss_hp, stamina, distance, intent, turns_remaining]`.
-- Default reset: `[6, 8, 4, 1, 3, 40]`.
-- Space: `MultiDiscrete([7, 9, 5, 3, 4, 41])`, integer NumPy array. Zero health and
-  zero turns are reserved for terminal observations.
-- Distances: `0=close`, `1=medium`, `2=far`.
-- Intents: `0=slash`, `1=sweep`, `2=lunge`, `3=recovery`.
-- Action space: `Discrete(5)`; legal mask is `info["action_mask"]` (`int8`).
-- `reset()` returns `(observation, info)`; `step()` returns
-  `(observation, reward, terminated, truncated, info)`.
-- `render_mode="ansi"` returns text; `render_mode="rgb_array"` returns a
-  deterministic `720 x 1200 x 3` uint8 image. Rendering never advances the RNG.
-- `info` includes outcome, events, mask, invalid-action flag, damage, stamina spent,
-  and separately auditable reward terms. It does not reveal the mixed-controller draw.
-
-The 40-turn deadline is an **intrinsic task failure**, and remaining time is part
-of the observation. Victory, death, and timeout therefore all set `terminated=True`
-and `truncated=False`. Registration deliberately does not add an external
-`TimeLimit` wrapper. Learning code must bootstrap zero at these terminal states.
-
-## Combat rules
-
-| ID | Action | Effect | Stamina |
-|---:|---|---|---:|
-| 0 | Approach | Move one band closer | 0 |
-| 1 | Retreat | Move one band farther away | -1 |
-| 2 | Strike | Deal 2 damage when close | -2 |
-| 3 | Guard | Block up to 2 damage this turn | -1 |
-| 4 | Rest | Recover stamina, capped at 4; no protection | +2 |
-
-The fighter acts first. A lethal strike prevents retaliation. Otherwise, the
-announced boss intent resolves at the updated distance: slash deals 2 if close;
-sweep deals 3 if close/medium; lunge advances one band and deals 1 if then close;
-recovery does nothing. The clock decreases, terminal outcomes are checked, and
-only a continuing episode samples the next visible intent. Victory/death precede
-the deadline on the final turn.
-
-Unaffordable actions, strikes out of range, and boundary-crossing movement are
-masked. The supplied policies and human interface enforce masks. A direct API
-call with a masked but in-range action wastes a turn: no player effect or stamina
-charge, normal boss retaliation, and the normal time cost. This explicitly defined
-fallback keeps generic Gymnasium callers valid. Non-integer/out-of-range IDs raise
-`ValueError` without advancing state or RNG; stepping before reset/after termination
-raises `RuntimeError`.
-
-### Enemy controllers
-
-After an offensive intent, combo probability `p_c` decides whether another attack
-or recovery follows. Recovery is always followed by an offensive intent. Attack
-weights below are conditional probabilities in slash/sweep/lunge order.
-
-| Controller | p_c | Attack weights/rule |
-|---|---:|---|
-| `balanced` | 0.50 | (1/3, 1/3, 1/3) |
-| `aggressive` | 0.75 | (0.50, 0.20, 0.30) |
-| `distance_aware` | 0.25 | 0.70 for slash when close, sweep when medium, lunge when far; 0.15 each otherwise |
-| `mixed` | mean 0.50 | Independently select one of the three training controllers at each next-intent selection |
-| `sweep_specialist` | 0.65 | (0.15, 0.65, 0.20); held-out policy evaluation reserved |
-| `relentless_pursuer` | 0.85 | (0.10, 0.20, 0.70); held-out policy evaluation reserved |
-| `enraged` | 0.35 / 0.85 | (0.20, 0.60, 0.20); high combo rate when boss HP <= 4; held-out evaluation reserved |
-
-Mixed selection occurs before the combo draw, and no sampled identity persists.
-Thus conditional offensive weights after an attack are weighted by component
-combo probabilities. The observable health trigger also keeps the enraged rule
-Markov. The RNG is local to each environment and seeded through Gymnasium.
-
-### Rewards
-
-Every step gives `-0.1 - 0.02 * stamina_spent`. Victory adds
-`100 + 10 * remaining_player_hp / 6`; death/timeout adds `-100` without a health
-bonus. Rest has zero stamina expenditure but still incurs the time cost.
-`reward_mode="terminal_time"` removes only the health bonus and stamina penalty
-for the planned reward ablation. The detailed reward terms in `info` sum to the
-returned reward. There is no reward for waiting or merely staying alive.
-
-For deterministic edge-case testing only,
-`env.reset(seed=7, options={"state": [1, 2, 2, 0, 1, 1]})` initializes a validated
-nonterminal fixture. Normal demo/smoke episodes always use the default reset.
-
-## Rebuild figures and report
-
-First run the demo and smoke commands above. Then:
+Optional small pipeline check:
 
 ```bash
-python -m pip install -r requirements-report.txt
-python tools/build_evidence.py
-python tools/build_report.py --author "Your Name"
+python -m read_the_boss.experiments --config configs/milestone3.json --quick --output experiments/quick_check
 ```
 
-The evidence builder runs the tests, records their actual log, renders a verbatim
-source excerpt with line numbers, summarizes measured output, and creates
-`evidence/demo/demo.gif` from the saved PNG frames. The GIF is an optional animated
-replay; no MP4 video is supplied. The report uses the saved measurements and images.
-Replace the default `[Your Name]` via `--author` before submission.
+This uses four 40-episode training runs and five evaluation episodes per condition.
+It excludes held-out bosses and is not a performance benchmark or a report dataset.
+All experiment commands protect existing outputs: use a new output directory
+for another run instead of reusing a populated one.
 
-To regenerate the required archive after any change:
+## 3. Train an individual agent
+
+Q-learning against the Mixed boss:
 
 ```bash
-python tools/package_submission.py
+python -m read_the_boss.training --algorithm q_learning --opponent mixed --episodes 20000 --seed 0 --alpha 0.15 --gamma 1.0 --epsilon-start 1.0 --epsilon-end 0.05 --epsilon-decay-fraction 0.8 --checkpoint-every 2000 --eval-episodes 100 --output experiments/local_qlearning
 ```
 
-It writes `milestone2.zip` next to the extracted `milestone2/` directory, excluding
-virtual environments, caches, and previous ZIPs. The final archive includes the
-PDF, source, README, tests, evidence, and `MANIFEST.json` file hashes.
+SARSA against the same boss:
 
-## Status and next steps
+```bash
+python -m read_the_boss.training --algorithm sarsa --opponent mixed --episodes 20000 --seed 0 --alpha 0.15 --gamma 1.0 --epsilon-start 1.0 --epsilon-end 0.05 --epsilon-decay-fraction 0.8 --checkpoint-every 2000 --eval-episodes 100 --output experiments/local_sarsa
+```
 
-Implemented: complete environment; seven boss modes; legal-action masks; two reward
-modes; seeded reset/step/render; human terminal play; three heuristic policies;
-tests; reproducible evidence. No Q-learning, SARSA, DQN, or trained checkpoint is
-included yet. The renderer is a schematic of discrete spacing, not a physics engine.
+Use `--opponent balanced` for single-controller training. Change `--episodes` and
+`--seed` to choose your budget and independent run. Exploration decreases linearly
+over the first 80% of episodes and then stays at 0.05. Evaluation uses epsilon=0
+and independent RNGs. Both methods use only legal actions, and terminal states
+(including the 40-turn deadline) bootstrap zero.
 
-Next: calibrate heuristics and difficulty using development/validation episodes,
-then freeze the design; implement masked Q-learning/SARSA; compare single/mixed
-training with equal step budgets and multiple seeds; perform the reward ablation;
-finally evaluate frozen policies on reserved behaviors. Any change to combat values
-or reward weights must be logged before formal experiments. The small smoke sample
-does not establish final performance or prove that mixed training is better.
+Each training directory contains:
 
-## Interface references
+| File | Contents |
+|---|---|
+| `agent.npz` | Final learned Q-table, visit counts, and model metadata |
+| `episodes.csv` | Per-episode returns, wins/losses, duration, health, stamina, seeds, and epsilon |
+| `metadata.json` | Configuration, total environment steps, update count, and summary |
+| `learning_curve.json` | Greedy checkpoint measurements when `--eval-episodes` is positive |
+| `learning_curve_episodes.csv` | Individual checkpoint evaluation episodes |
 
-- Gymnasium custom environment guide: https://gymnasium.farama.org/introduction/create_custom_env/
-- Task termination versus external truncation: https://farama.org/Gymnasium-Terminated-Truncated-Step-API
+Training starts from a zero-initialized table. Checkpoint loading supports
+inference/evaluation; resuming an interrupted training run is not implemented.
 
-Combat rules, controllers, policies, rendering, tests, and report content are specific
-to this project; no prebuilt game environment is used.
+## 4. Evaluate a model you have trained
+
+After the Q-learning command above has created its model:
+
+```bash
+python -m read_the_boss.evaluate --model experiments/local_qlearning/agent.npz --opponent mixed --episodes 500 --output experiments/local_qlearning_eval --demo
+```
+
+For the SARSA model, use `experiments/local_sarsa/agent.npz` and a different output
+directory. The command writes per-episode `episodes.csv` and `summary.json`.
+`--demo` additionally creates a `demo/` folder with an animated GIF and action trace.
+The replay uses seed 7 by default; it is one episode, not a success-rate estimate.
+
+Compare a heuristic using the same default environment/policy seed lists:
+
+```bash
+python -m read_the_boss.evaluate --policy random --opponent mixed --episodes 500 --output experiments/local_random_eval
+python -m read_the_boss.evaluate --policy aggressive --opponent mixed --episodes 500 --output experiments/local_aggressive_eval
+python -m read_the_boss.evaluate --policy reactive --opponent mixed --episodes 500 --output experiments/local_reactive_eval
+```
+
+Other evaluation opponents: `balanced`, `aggressive`, `distance_aware`,
+`sweep_specialist`, `relentless_pursuer`, and `enraged`. The final three are the
+held-out behaviors in the supplied design. Use training/validation results for
+tuning; if you tune using held-out outcomes, reserve new conditions for a final test.
+
+## 5. Run the complete experiment matrix
+
+This is an alternative to the individual-run commands: the runner trains every
+model itself, then evaluates all final models and all three heuristics.
+
+```bash
+python -m read_the_boss.experiments --config configs/milestone3.json --output experiments/milestone3
+```
+
+The default configuration is:
+
+| Parameter | Value |
+|---|---|
+| Algorithms | Q-learning and SARSA |
+| Training opponents | Balanced and Mixed |
+| Training seeds | 0, 1, 2 |
+| Budget | 20,000 episodes per run; 12 runs total |
+| Learning rate / discount | alpha=0.15, gamma=1.0 |
+| Exploration | epsilon 1.0 to 0.05 over the first 80% of episodes |
+| Checkpoint evaluation | 100 episodes at episode 0 and every 2,000 episodes |
+| Final evaluation | 500 episodes per trained model per boss |
+| Baselines | Random, Aggressive, Reactive; 500 episodes each per boss |
+
+The complete run creates:
+
+- `experiments/milestone3/final_summary.json`: aggregate results, including
+  variation across training seeds and held-out performance.
+- `runs/`: final models, training logs, and raw checkpoint/final evaluations.
+- `baseline_results.json` and `baseline_episodes.csv`: heuristic measurements.
+- `learning_curves.json`: checkpoint results across all runs.
+- `manifest.json` and `resolved_config.json`: provenance, versions, seeds, hashes,
+  and the exact resolved experiment settings.
+- `demo/`: the predetermined model/seed replay and trace.
+
+Edit `configs/milestone3.json` to change budgets or parameters. For the supplied
+report builder, retain both algorithms, both training regimes, at least two
+training seeds, and all seven final opponents. If you remove seed 0, update
+`demo.training_seed` to a retained seed or set `demo.enabled` to false.
+Use a new output directory for each configuration so results remain separate.
+
+Budgets here match episodes, not environment steps; actual step totals are logged.
+Only the final model is evaluated in the final comparison. Training randomness,
+checkpoint seeds, and final evaluation seeds are separate. Heuristics are evaluated
+once per boss; uncertainty for learned methods is sample SD across training seeds.
+
+## 6. Optional: generate figures and a report from your results
+
+After the full experiment matrix finishes:
+
+```bash
+python tools/build_milestone3_report.py --summary experiments/milestone3/final_summary.json --author "Qipan Xu"
+```
+
+This generates the four figures, result tables, and LaTeX source under
+`report/milestone3/`. Plotting uses `tmp/matplotlib/` for its cache unless
+`MPLCONFIGDIR` points to a writable directory.
+
+Add `--compile` if a TeX distribution providing `pdflatex` is installed:
+
+```bash
+python tools/build_milestone3_report.py --summary experiments/milestone3/final_summary.json --author "Qipan Xu" --compile
+```
+
+Review the generated report's wording and interpretation against your own results
+before submitting. To use Overleaf, upload the entire generated
+`report/milestone3/` folder, including `results_generated.tex` and `figures/`.
+The report builder replaces its generated LaTeX when rerun; edit `TEX_TEMPLATE`
+in the builder if you want wording changes to persist across regeneration.
+
+Once the full results and PDF exist, package your submission:
+
+```bash
+python tools/package_milestone3.py --last-name Xu --first-name Qipan
+```
+
+The archive is written to `dist/Xu_Qipan_milestone3.zip`.
+
+## 7. Source layout
+
+| Path | Purpose |
+|---|---|
+| `read_the_boss/env.py` | Gymnasium arena environment |
+| `read_the_boss/controllers.py` | Scripted boss strategies |
+| `read_the_boss/policies.py` | Random, Aggressive, and Reactive player baselines |
+| `read_the_boss/agents.py` | Tabular Q-learning/SARSA, action masks, save/load |
+| `read_the_boss/training.py` | Training loop and single-run CLI |
+| `read_the_boss/evaluation.py` | Evaluation metrics and replay recording |
+| `read_the_boss/evaluate.py` | Saved-agent and heuristic evaluation CLI |
+| `read_the_boss/experiments.py` | Reproducible multi-run experiment driver |
+| `read_the_boss/render.py` | Arena visualization |
+| `tests/` | Environment and RL tests |
+| `configs/milestone3.json` | Complete experiment design |
+| `tools/build_milestone3_report.py` | Generate figures and LaTeX/PDF from measurements |
+
+The existing environment commands still work:
+
+```bash
+python run_demo.py
+python -m read_the_boss play --opponent mixed --seed 7
+```
+
+Use `python -m read_the_boss.training --help`,
+`python -m read_the_boss.evaluate --help`, or
+`python -m read_the_boss.experiments --help` for command options.
+
+## 8. Commit the merged code to GitHub
+
+The Milestone 3 source is merged into the repository root. The original
+`milestone3_source/` folder is retained locally and ignored by Git; make future
+changes in the root source directories.
+
+Create a branch from your current checkout:
+
+```bash
+git switch -c milestone3-source
+```
+
+Inspect changes, run tests, and commit the source and instructions:
+
+```bash
+git status
+python -m unittest discover -s tests -v
+git add read_the_boss tests tools configs .github .gitignore .gitattributes README.md run_demo.py requirements*.txt
+git diff --cached --stat
+git commit -m "Add Milestone 3 RL source and run instructions"
+git push -u origin milestone3-source
+```
+
+Open a pull request into `main`. For future milestones, keep one maintained
+`read_the_boss/` package, use a new branch, and save each experiment configuration
+and result directory separately. Stage result files deliberately when you are
+ready to publish them. The default `experiments/local*` and `experiments/quick*`
+folders are ignored by Git. After merging a reviewed submission, preserve it with
+a milestone tag.

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "experiment_name": "milestone3_initial_study",
+  "description": "Predetermined 20,000-episode initial study; not the final proposal's two-million-step, five-seed study.",
+  "training": {
+    "algorithms": ["q_learning", "sarsa"],
+    "opponents": ["balanced", "mixed"],
+    "seeds": [0, 1, 2],
+    "episodes": 20000,
+    "alpha": 0.15,
+    "gamma": 1.0,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.05,
+    "epsilon_decay_fraction": 0.8,
+    "checkpoint_every": 2000,
+    "reward_mode": "full"
+  },
+  "checkpoint_evaluation": {
+    "episodes": 100,
+    "env_seed_start": 100000,
+    "policy_seed_start": 200000
+  },
+  "final_evaluation": {
+    "episodes": 500,
+    "env_seed_start": 300000,
+    "policy_seed_start": 400000,
+    "opponents": [
+      "balanced", "aggressive", "distance_aware", "mixed",
+      "sweep_specialist", "relentless_pursuer", "enraged"
+    ]
+  },
+  "baselines": ["random", "aggressive", "reactive"],
+  "demo": {
+    "enabled": true,
+    "algorithm": "q_learning",
+    "training_opponent": "mixed",
+    "training_seed": 0,
+    "opponent": "balanced",
+    "seed": 7,
+    "policy_seed": 500007
+  }
+}

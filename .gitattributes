@@ -1,0 +1,11 @@
+# Keep source hashes and portable model compatibility stable across platforms.
+* text=auto eol=lf
+
+# CSV evidence is stored exactly as emitted by Python's csv writer (CRLF).
+*.csv -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+*.npz -text
+*.png -text
+*.gif -text
+*.pdf -text
+*.zip -text
+*.bundle -text
